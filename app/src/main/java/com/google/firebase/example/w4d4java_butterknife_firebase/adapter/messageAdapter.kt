@@ -16,12 +16,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.example.w4d4java_butterknife_firebase.Message
 import com.google.firebase.example.w4d4java_butterknife_firebase.R
 
-class MessageAdapter(private val messageadapterDelegate: MessageAdapterDelegate)
+class MessageAdapter
 
     : ListAdapter<Message, MessageAdapter.MessageViewHolder>(MessageDiffUtil()){
-    interface  MessageAdapterDelegate{
-        fun messageSelect(message: Message)
-    }
+
 
     override fun onCreateViewHolder(
             parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -33,9 +31,7 @@ class MessageAdapter(private val messageadapterDelegate: MessageAdapterDelegate)
         holder.apply {
             nameText.text = getItem(position).name
             messageText.text = getItem(position).message
-            viewGroup.setOnClickListener{
-                messageadapterDelegate.messageSelect(getItem(position))
-            }
+
             viewGroup.context?.let {
                 Glide.with(it) //1
                         .load(getItem(position).photo)

@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
-    private List<Message> messageList;
 
     private String mUsername;
     private String mPhotoUrl;
@@ -81,13 +81,15 @@ public class MainActivity extends AppCompatActivity {
         myDataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Message> messageList = new ArrayList<Message> ();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Message readMessage = snapshot.getValue(Message.class);
-                    Map<String, Message> td = (HashMap<String,Message>) dataSnapshot.getValue();
-
-                    //List<Message> values = td.values();
                     messageTextView.setText(messageTextView.getText()+ "\n" + readMessage.getMessage());
+                    messageList.add(readMessage);
                 }
+                ((MessageAdapter) recyclerView.getAdapter()).submitList(messageList);
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -99,18 +101,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Message newMessage = new Message(messageEdittext.getText().toString(), mUsername, mPhotoUrl);
-
                 myDataReference.push().setValue(newMessage);
             }
         });
 
 
-/*
+
         recyclerView = (RecyclerView) findViewById(R.id.my_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter();
+        recyclerView.setAdapter(new MessageAdapter());
 
- */
+
+
     }
 
 
