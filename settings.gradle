@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name='W4D4Java_Butterknife_Firebase'
